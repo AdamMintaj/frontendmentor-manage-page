@@ -1,0 +1,775 @@
+// Colors, mixins, n'shit
+$red: hsl(12, 88%, 59%);
+$lightRed: rgb(249, 143, 117);
+$blue: hsl(228, 39%, 23%);
+$grayishBlue: hsl(227, 12%, 61%);
+$darkBlue: hsl(233, 12%, 13%);
+$paleRed: hsl(13, 100%, 96%);
+$lightGray: hsl(0, 0%, 98%);
+
+@mixin startButton($background, $font, $focus) {
+	width: 8.6rem;
+	border: 0;
+	background-color: $background;
+	color: $font;
+	font-weight: 700;
+	height: 3rem;
+	border-radius: 30px;
+	cursor: pointer;
+	transition: 0.3s;
+	font-family: Be vietnam;
+
+	&:hover {
+		background-color: $focus;
+		box-shadow: 0 0.5rem 1rem 0 $lightRed;
+	}
+}
+
+@mixin header($fontSize, $textAlign) {
+	color: $blue;
+	font-size: $fontSize;
+	text-align: $textAlign;
+}
+
+@mixin paragraph($fontSize, $textAlign) {
+	color: $grayishBlue;
+	font-size: $fontSize;
+	text-align: $textAlign;
+	line-height: 1.8;
+}
+
+@mixin featureId($width) {
+	height: 2.5rem;
+	width: $width;
+	background-color: $red;
+	border-radius: 30px;
+	color: white;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+// Styles - mobile first
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+}
+
+html {
+	font-size: 16px;
+	font-family: Be vietnam;
+}
+
+body {
+	background-color: white;
+	background-image: url(images/bg-tablet-pattern.svg);
+	background-position: -80% -10%;
+	background-size: 120% auto;
+	background-repeat: no-repeat;
+}
+
+.header {
+	width: 100%;
+	height: 7rem;
+	padding: 0 6.5%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+
+	&__logo {
+		width: 30%;
+
+		img {
+			display: block;
+			width: 100%;
+			max-width: 12.5rem;
+		}
+	}
+
+	&__nav {
+		.nav__overlay {
+			position: fixed;
+			top: 100vh;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
+			background-image: linear-gradient(transparent, black);
+			transition: 0.6s;
+			z-index: 2;
+		}
+
+		.nav__links {
+			width: 87%;
+			background-color: white;
+			margin: 0 6.5%;
+			position: absolute;
+			top: -22rem;
+			left: 0;
+			border-radius: 5px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			padding: 2rem 0;
+			z-index: 3;
+			transition: 1.4s;
+
+			a {
+				text-decoration: none;
+				color: black;
+				font-weight: 700;
+				margin: 1rem 0;
+
+				&:hover {
+					color: $grayishBlue;
+				}
+			}
+		}
+
+		&--active {
+			.nav__overlay {
+				top: 0;
+			}
+
+			.nav__links {
+				top: 7rem;
+			}
+		}
+	}
+
+	&__startButton {
+		display: none;
+	}
+
+	&__navButton {
+		border: 0;
+		background-color: transparent;
+		cursor: pointer;
+		background-image: url(images/icon-hamburger.svg);
+		background-repeat: no-repeat;
+		width: 25px;
+		height: 18px;
+		z-index: 3;
+		background-size: contain;
+		background-position: center;
+		transition: 0.25s;
+	}
+}
+
+.main {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	background-image: url(images/bg-tablet-pattern.svg);
+	background-position: 300% 25%;
+	background-size: 80% auto;
+	background-repeat: no-repeat;
+
+	.presentation {
+		padding: 0 6.5%;
+
+		&__image {
+			width: 100%;
+			img {
+				width: 100%;
+			}
+		}
+
+		&__text {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		&__header {
+			@include header(2.5rem, center);
+		}
+
+		&__paragraph {
+			@include paragraph(1rem, center);
+			margin: 0.8rem 0 2rem;
+		}
+
+		&__startButton {
+			@include startButton($red, white, $lightRed);
+		}
+	}
+
+	.about {
+		padding: 0 6.5%;
+		margin-top: 6.5rem;
+
+		&__intro {
+			.intro__header {
+				@include header(2rem, center);
+			}
+
+			.intro__paragraph {
+				@include paragraph(0.8rem, center);
+				margin: 2rem 0;
+			}
+		}
+
+		&__features {
+			.feature {
+				&__id {
+					@include featureId(4rem);
+					position: relative;
+					z-index: 1;
+				}
+
+				&__header {
+					@include header(0.9rem, center);
+					display: inline-block;
+					position: absolute;
+					right: 0;
+					line-height: 2.5rem;
+					height: 2.5rem;
+					width: 81.5%;
+					margin: 0 5% 0 13.5%;
+					z-index: 0;
+					background-color: $paleRed;
+				}
+
+				&__paragraph {
+					@include paragraph(0.8rem, left);
+					margin: 0.5rem 0 2.4rem;
+				}
+			}
+		}
+	}
+
+	.testimonials {
+		margin-top: 2rem;
+
+		&__title {
+			@include header(2rem, center);
+			margin-bottom: 2rem;
+		}
+
+		&__slider {
+			margin: 0 6.5%;
+			padding-top: 3rem;
+			overflow: hidden;
+
+			.slider__container {
+				display: flex;
+				transition: 0.8s;
+				transform: translateX(0);
+			}
+
+			.slide {
+				min-width: 100%;
+				background-color: $lightGray;
+				position: relative;
+
+				&__img {
+					width: 4.5rem;
+					border-radius: 50%;
+					position: absolute;
+					top: -2.25rem;
+					left: calc(50% - 4.5rem / 2);
+				}
+
+				&__name {
+					@include header(1rem, center);
+					font-weight: 700;
+					margin-top: 4rem;
+				}
+
+				&__text {
+					@include paragraph(1rem, center);
+					margin: 1.5rem 1.5rem 2.5rem;
+				}
+			}
+		}
+
+		&__controls {
+			margin: 1.5rem auto 2.8rem;
+			width: 5rem;
+			display: flex;
+			justify-content: space-evenly;
+		}
+
+		&__controlButton {
+			border: 1px solid $red;
+			background-color: transparent;
+			width: 0.6rem;
+			height: 0.6rem;
+			border-radius: 10px;
+			cursor: pointer;
+			transition: 0.8s;
+			margin: 0;
+			padding: 0;
+
+			&:hover {
+				background-color: $lightRed;
+			}
+
+			&--clicked {
+				background-color: $red;
+			}
+		}
+
+		&__startButton {
+			@include startButton($red, white, $lightRed);
+			margin: 0 auto;
+			display: block;
+		}
+	}
+
+	.banner {
+		width: 100%;
+		background-color: $red;
+		margin-top: 3rem;
+		background-image: url(images/bg-simplify-section-mobile.svg);
+		background-repeat: no-repeat;
+		background-position-y: 50%;
+
+		&__title {
+			@include header(2.5rem, center);
+			color: white;
+			padding: 0 6.5%;
+			margin-top: 6rem;
+		}
+
+		&__startButton {
+			@include startButton(white, $red, white);
+			display: block;
+			margin: 2rem auto 6rem;
+		}
+	}
+}
+
+.footer {
+	padding: 0 6.5%;
+	background-color: $darkBlue;
+	display: flex;
+	flex-direction: column;
+
+	&__subscription {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		margin-top: 3.2rem;
+	}
+
+	&__input {
+		height: 3rem;
+		border-radius: 25px;
+		font-family: be vietnam;
+
+		&--email {
+			background-color: white;
+			border-left: 20px solid white;
+			border-right: 20px solid white;
+			border-top: 2px solid white;
+			border-bottom: 2px solid white;
+			width: 74%;
+		}
+
+		&--submit {
+			width: 23%;
+			background-color: $red;
+			border: 0;
+			color: white;
+			font-size: 0.8rem;
+			cursor: pointer;
+
+			&:hover {
+				background-color: $red;
+				box-shadow: 0 0.5rem 1rem 0 $lightRed;
+			}
+		}
+	}
+
+	&__links {
+		height: 9rem;
+		display: flex;
+		flex-direction: column;
+		flex-wrap: wrap;
+		margin-top: 3rem;
+	}
+
+	&__link {
+		text-decoration: none;
+		color: white;
+		transition: 0.4s;
+		height: 25%;
+		width: 50%;
+		flex-shrink: 0;
+		flex-grow: 0;
+		padding-left: 10%;
+		font-size: 0.9rem;
+
+		&:hover {
+			color: $red;
+		}
+	}
+
+	&__socialMedia {
+		padding: 0 6.5%;
+		display: flex;
+		flex-direction: column;
+		margin-top: 3rem;
+		height: 6rem;
+		justify-content: space-between;
+	}
+
+	&__icons {
+		height: 2rem;
+		display: flex;
+		justify-content: space-evenly;
+	}
+
+	&__icon {
+		&:hover {
+			cursor: pointer;
+
+			path {
+				transition: 0.4s;
+				fill: $red;
+			}
+		}
+	}
+
+	&__logo {
+		margin: 0 auto;
+	}
+
+	&__copyright {
+		margin-top: 1.5rem;
+		@include paragraph(0.8rem, center);
+	}
+
+	&__attribution {
+		margin-top: 1.5rem;
+		text-align: center;
+		color: $grayishBlue;
+		font-size: 1rem;
+
+		a {
+			text-decoration: none;
+			color: white;
+			cursor: pointer;
+			transition: 0.4s;
+
+			&:hover {
+				color: $red;
+			}
+		}
+	}
+}
+
+// baby sized mobiles
+@media only screen and (max-width: 389px) {
+	.main {
+		.about {
+			&__features {
+				.feature {
+					&__id {
+						@include featureId(18%);
+					}
+
+					&__header {
+						@include header(0.75rem, center);
+					}
+				}
+			}
+		}
+	}
+}
+
+//desktops
+@media only screen and (min-width: 1065px) {
+	body {
+		background-position: 120% -20%;
+		background-size: 60% auto;
+	}
+
+	.header {
+		width: 100%;
+		height: 10rem;
+		padding: 0 11%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+
+		&__logo {
+			width: 15%;
+
+			img {
+				display: block;
+				width: 100%;
+				max-width: none;
+			}
+		}
+
+		&__navButton {
+			display: none;
+		}
+
+		&__startButton {
+			display: block;
+			@include startButton($red, white, $lightRed);
+		}
+
+		&__nav {
+			.nav__overlay {
+				display: none;
+			}
+
+			.nav__links {
+				width: auto;
+				background-color: transparent;
+				margin: auto;
+				position: static;
+				top: auto;
+				left: auto;
+				border-radius: 5px;
+				display: flex;
+				flex-direction: row;
+				align-items: center;
+				padding: 0 0 2%;
+
+				a {
+					text-decoration: none;
+					color: black;
+					font-weight: 700;
+					margin: 0 1rem;
+
+					&:hover {
+						color: $grayishBlue;
+					}
+				}
+			}
+		}
+	}
+
+	.main {
+		background-position: -80% 70%;
+		background-size: 60% auto;
+
+		.presentation {
+			padding: 0 11%;
+			display: flex;
+			flex-direction: row-reverse;
+
+			&__image {
+				width: 50%;
+				img {
+					width: 100%;
+				}
+			}
+
+			&__text {
+				display: flex;
+				flex-direction: column;
+				align-items: flex-start;
+				justify-content: center;
+				padding-right: 15%;
+				width: 50%;
+			}
+
+			&__header {
+				@include header(2.5rem, left);
+			}
+
+			&__paragraph {
+				@include paragraph(1rem, left);
+				margin: 2rem 0 2rem;
+			}
+
+			&__startButton {
+				@include startButton($red, white, $lightRed);
+			}
+		}
+
+		.about {
+			padding: 0 11%;
+			display: flex;
+
+			&__intro {
+				width: 50%;
+
+				.intro__header {
+					@include header(2.5rem, left);
+				}
+
+				.intro__paragraph {
+					@include paragraph(1rem, left);
+					margin: 1.5rem 0;
+					padding-right: 35%;
+				}
+			}
+
+			&__features {
+				width: 50%;
+
+				.feature {
+					display: grid;
+					grid-template-columns: auto auto;
+					grid-template-rows: auto auto;
+					margin-top: 1rem;
+
+					&__id {
+						@include featureId(4rem);
+						position: static;
+						z-index: auto;
+						grid-column: 1/2;
+						grid-row: 1/2;
+						margin-right: 2rem;
+					}
+
+					&__header {
+						@include header(1rem, left);
+						display: block;
+						position: static;
+						right: auto;
+						width: auto;
+						margin: 0;
+						z-index: auto;
+						background-color: transparent;
+						grid-column: 2/3;
+						grid-template-rows: 1/2;
+					}
+
+					&__paragraph {
+						@include paragraph(1rem, left);
+						grid-column: 2/3;
+						grid-row: 2/3;
+					}
+				}
+			}
+		}
+
+		.testimonials {
+			margin-top: 6rem;
+
+			&__title {
+				@include header(2.5rem, center);
+				margin-bottom: 2rem;
+			}
+
+			&__slider {
+				margin: 0;
+				padding-top: 5rem;
+				overflow: hidden;
+
+				.slider__container {
+					display: flex;
+					transition: 3s;
+					transform: translateX(0);
+				}
+
+				.slide {
+					min-width: 0%;
+					width: 37%;
+					flex-shrink: 0;
+					margin: 0 1rem;
+				}
+
+				// .slide:first-child {
+				//	 border-left: 3rem solid white;
+				// }
+
+				.slide:last-child {
+					border-right: 3rem solid white;
+				}
+			}
+
+			&__controls {
+				display: none;
+			}
+
+			&__startButton {
+				margin: 2.5rem auto 0;
+			}
+		}
+
+		.banner {
+			margin-top: 10rem;
+			background-image: url(images/bg-simplify-section-desktop.svg);
+			background-position: -100% 100%;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			height: 15rem;
+
+			&__title {
+				@include header(2.5rem, left);
+				color: white;
+				margin-left: 11%;
+				margin-top: 0;
+				padding: 0;
+				width: 40%;
+				max-width: 560px;
+			}
+
+			&__startButton {
+				margin: 0;
+				margin-right: 11%;
+			}
+		}
+	}
+
+	.footer {
+		padding: 3.5rem 11%;
+		display: grid;
+		grid-template-columns: 16% 45% auto 25%;
+		grid-template-rows: auto auto auto;
+
+		&__subscription {
+			grid-column: 4/5;
+			grid-row: 1/2;
+			margin-top: 0;
+			padding-top: 0.8rem;
+		}
+
+		&__links {
+			grid-column: 2/3;
+			grid-row: 1/3;
+			margin-top: 0;
+		}
+
+		&__link {
+			padding-left: 20%;
+			padding-top: 0.8rem;
+		}
+
+		&__socialMedia {
+			grid-column: 1/2;
+			grid-row: 1/3;
+			padding: 0;
+			flex-direction: column-reverse;
+			margin-top: 0;
+			height: 100%;
+			justify-content: space-between;
+		}
+
+		&__icons {
+			height: 1.4rem;
+			justify-content: space-between;
+		}
+
+		&__logo {
+			margin: 0;
+			padding-top: 0.8rem;
+		}
+
+		&__copyright {
+			grid-column: 4/5;
+			grid-row: 2/3;
+			margin-top: 0;
+			align-self: flex-end;
+			text-align: right;
+		}
+
+		&__attribution {
+			position: relative;
+			top: 1.5rem;
+			grid-column: 1/5;
+			grid-row: 3/4;
+		}
+	}
+}
