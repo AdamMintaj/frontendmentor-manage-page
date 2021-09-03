@@ -352,12 +352,32 @@ body {
 		display: flex;
 		justify-content: space-between;
 		margin-top: 3.2rem;
+		position: relative;
+
+		&--invalid {
+			&:after {
+				content: "Please insert a valid email";
+				color: red;
+				display: block;
+				position: absolute;
+				top: 3.5rem;
+				font-style: italic;
+				font-family: Be vietnam;
+				font-size: 0.6rem;
+				margin-left: 20px;
+			}
+		}
 	}
 
 	&__input {
 		height: 3rem;
 		border-radius: 25px;
 		font-family: be vietnam;
+
+		&--invalid {
+			color: red;
+			outline: 1px solid red;
+		}
 
 		&--email {
 			background-color: white;
@@ -473,6 +493,22 @@ body {
 
 					&__header {
 						@include header(0.75rem, center);
+					}
+				}
+			}
+		}
+	}
+}
+
+// bigger mobile screens
+@media only screen and (min-width: 765px) {
+	.main {
+		.about {
+			&__features {
+				.feature {
+					&__header {
+						width: 85%;
+						margin: 0 5% 0 10%;
 					}
 				}
 			}
@@ -724,6 +760,13 @@ body {
 			grid-row: 1/2;
 			margin-top: 0;
 			padding-top: 0.8rem;
+
+			&--invalid {
+				&:after {
+					top: auto;
+					bottom: 0.5rem;
+				}
+			}
 		}
 
 		&__links {

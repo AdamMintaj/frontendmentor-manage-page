@@ -116,3 +116,30 @@
 
         slider?.addEventListener("mousemove", calculate);
     }
+
+// THIS VERIFIES EMAIL FOR SUBSCRIPTION
+
+const inputField: HTMLInputElement = document.querySelector(".footer__input--email")!;
+const pattern:RegExp = /^\S+@\S+\.\S+$/;
+const subscription: HTMLElement = document.querySelector(".footer__subscription")!;
+
+inputField.addEventListener("input", ()=> {
+    let userInput = inputField.value;
+    if(pattern.test(userInput)) {
+        subscription.classList.remove("footer__subscription--invalid");
+        inputField.classList.remove("footer__input--invalid");
+        console.log("email");
+    }
+    else {
+        subscription.classList.add("footer__subscription--invalid");
+        inputField.classList.add("footer__input--invalid");
+        console.log("not email");
+    }
+})
+
+// THIS RELOADS THE PAGE WHEN WINDOW RESIZES
+
+window.addEventListener("resize", ()=> {
+    let address = location.pathname;
+    location.replace(address);
+})
