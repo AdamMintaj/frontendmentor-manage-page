@@ -302,10 +302,6 @@ body {
 			margin: 0;
 			padding: 0;
 
-			&:hover {
-				background-color: $lightRed;
-			}
-
 			&--clicked {
 				background-color: $red;
 			}
@@ -691,10 +687,15 @@ body {
 				margin: 0;
 				padding-top: 5rem;
 				overflow: hidden;
+				cursor: grab;
+
+				&--grabbing {
+					cursor: grabbing;
+				}
 
 				.slider__container {
 					display: flex;
-					transition: 3s;
+					transition: 0s;
 					transform: translateX(0);
 				}
 
@@ -703,14 +704,7 @@ body {
 					width: 37%;
 					flex-shrink: 0;
 					margin: 0 1rem;
-				}
-
-				// .slide:first-child {
-				//	 border-left: 3rem solid white;
-				// }
-
-				.slide:last-child {
-					border-right: 3rem solid white;
+					user-select: none;
 				}
 			}
 

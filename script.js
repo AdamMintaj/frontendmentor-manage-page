@@ -1,8 +1,9 @@
-// THIS CONTROLS THE HEADER
-var navBtn = document.getElementById("navButton");
-var nav = document.getElementById("nav");
-// This variable is to control icon of navBtn
-var icon = false;
+"use strict";
+// HEADER
+const navBtn = document.getElementById("navButton");
+const nav = document.getElementById("nav");
+// This variable controls icon of navBtn
+let icon = false;
 function showNav() {
     nav.classList.toggle("header__nav--active");
     rotate();
@@ -12,7 +13,7 @@ function rotate() {
     navBtn.style.transform = "rotateY(90deg)";
     icon = !icon;
 }
-navBtn.addEventListener("transitionend", function () {
+navBtn.addEventListener("transitionend", () => {
     if (icon) {
         navBtn.style.backgroundImage = "url(images/icon-close.svg)";
     }
@@ -23,87 +24,113 @@ navBtn.addEventListener("transitionend", function () {
 });
 navBtn.addEventListener("click", showNav);
 // ----------------------------------------------------------------------------
-// THIS CONTROLS THE SLIDER FOR MOBILE VERSION
-var controlBtns = document.querySelectorAll(".testimonials__controlButton");
-var viewbox = document.getElementById("viewbox");
-var viewboxWidth = viewbox.clientWidth;
-var _loop_1 = function (i) {
-    controlBtns[i].addEventListener("click", function () {
-        viewbox.style.transform = "translateX(-" + i * viewboxWidth + "px)";
-        mark(this);
-    });
-};
-// This moves the slides
-for (var i = 0; i < controlBtns.length; i++) {
-    _loop_1(i);
-}
-// This function marks the active button
-function mark(button) {
-    for (var i = 0; i < controlBtns.length; i++) {
-        if (controlBtns[i].classList.contains("testimonials__controlButton--clicked")) {
-            controlBtns[i].classList.remove("testimonials__controlButton--clicked");
-        }
-    }
-    button.classList.add("testimonials__controlButton--clicked");
-}
-// This makes the slider move when left idle
+// SLIDER 
+const slider = document.getElementById("slider");
+const viewbox = document.getElementById("viewbox");
+let viewboxWidth = viewbox.clientWidth;
+let startPos;
+let endPos;
+// FOR MOBILE VERSION
 if (window.innerWidth < 1065) {
-    window.setInterval(function cycle() {
-        // Next 2 lines are variables that hold viewbox's current position as a string (matrix) and a number value
-        var position = window.getComputedStyle(viewbox).getPropertyValue("transform");
-        var valueOfX = +position.split(",")[4];
-        // This variable follows the index of the next slide to display and button to activate
-        var index = Math.abs(valueOfX / viewbox.clientWidth) + 1;
-        //Next 4 lines control the active button
-        if (index > 3) {
-            index = 0;
+    const controlBtns = document.querySelectorAll(".testimonials__controlButton");
+    let currentSlide = 0;
+    slider === null || slider === void 0 ? void 0 : slider.addEventListener("touchstart", touchStart);
+    slider === null || slider === void 0 ? void 0 : slider.addEventListener("touchmove", touchMove);
+    slider === null || slider === void 0 ? void 0 : slider.addEventListener("touchend", touchEnd);
+    function touchStart(event) {
+        startPos = event.touches[0].clientX;
+    }
+    function touchMove(event) {
+        endPos = event.touches[0].clientX;
+    }
+    function touchEnd() {
+        if ((currentSlide < 3 && startPos - endPos) > 100) {
+            currentSlide++;
         }
-        mark(controlBtns[index]);
-        // Next 4 lines calculate how much the viewbox should be moved next and reset the counter on the last slide or if click event and setInterval are launched at the same time 
-        valueOfX = valueOfX - viewboxWidth;
-        if (valueOfX / viewboxWidth == -4 || !Number.isInteger(valueOfX % viewboxWidth)) {
-            valueOfX = 0;
+        if ((currentSlide > 0 && startPos - endPos) < -100) {
+            currentSlide--;
         }
-        // The next 4 lines merge the calculated value into a string and change the viewbox's translation
-        position = position.split(",");
-        position.splice(4, 1, valueOfX.toString());
-        position = position.toString();
-        viewbox.style.transform = position;
-    }, 6000);
+        viewbox.style.transform = `translateX(-${currentSlide * viewboxWidth}px)`;
+        endPos = undefined;
+        markCurrent(controlBtns[currentSlide]);
+    }
+    // Buttons that move the slides in mobile version
+    for (let i = 0; i < controlBtns.length; i++) {
+        controlBtns[i].addEventListener("click", function () {
+            viewbox.style.transform = `translateX(-${i * viewboxWidth}px)`;
+            currentSlide = i;
+            markCurrent(this);
+        });
+    }
+    // This function marks the active button
+    function markCurrent(button) {
+        for (let i = 0; i < controlBtns.length; i++) {
+            if (controlBtns[i].classList.contains("testimonials__controlButton--clicked")) {
+                controlBtns[i].classList.remove("testimonials__controlButton--clicked");
+            }
+        }
+        button.classList.add("testimonials__controlButton--clicked");
+    }
 }
-// ----------------------------------------------------------------------------
-// THIS CONTROLS THE SLIDER FOR DESKTOP VERSION
+// FOR DESKTOP VERSION
 if (window.innerWidth >= 1065) {
-    var slider = document.getElementById("slider");
-    var windowWidth_1 = slider.clientWidth;
-    var viewbox_1 = document.getElementById("viewbox");
+    const windowWidth = slider.clientWidth;
+    let dragging = false;
+    let distanceToMiddle = -(0.055 * windowWidth + 48); // Translating by this centers the second slide in the middle of the screen
+    let sliderPosition = 0;
+    let translation = 0;
+    let prevTranslation = distanceToMiddle;
     // This resets the slider
     function resetSlider() {
-        var distanceToMiddle = 0.055 * windowWidth_1 + 48;
-        viewbox_1.style.transform = "translateX(-" + distanceToMiddle + "px)";
+        viewbox.style.transition = "2s";
+        viewbox.style.transform = `translateX(${distanceToMiddle}px)`;
+        dragging = false;
+        sliderPosition = 0;
+        translation = 0;
+        prevTranslation = distanceToMiddle;
     }
     resetSlider();
+    slider === null || slider === void 0 ? void 0 : slider.addEventListener("mousedown", mouseDown);
+    slider === null || slider === void 0 ? void 0 : slider.addEventListener("mousemove", mouseMove);
+    slider === null || slider === void 0 ? void 0 : slider.addEventListener("mouseup", mouseUp);
     slider === null || slider === void 0 ? void 0 : slider.addEventListener("mouseleave", resetSlider);
-    // This function follows the cursor and calculates the slider's overflow
-    function calculate(event) {
-        var xPos = event.clientX;
-        var overflow = viewbox_1.scrollWidth - windowWidth_1;
-        moveSlider(xPos, overflow);
+    function mouseDown(event) {
+        viewbox.style.transition = "0s";
+        viewbox.classList.add("testimonials__slider--grabbing");
+        dragging = true;
+        startPos = event.clientX;
     }
-    // This function translates the slides by x pixels, relative to the mouse position.
-    // If the cursor is 100% to the right slides get translated by 100% of the overflow.
-    // if the cursor is 100% to the left slides are translated by 0% of the overflow.
-    function moveSlider(XPOS, OVERFLOW) {
-        viewbox_1.style.transform = "translateX(-" + OVERFLOW * (XPOS / windowWidth_1) + "px)";
+    function mouseMove(event) {
+        if (dragging) {
+            endPos = event.clientX;
+            translation = (startPos - endPos);
+            sliderPosition = prevTranslation - translation;
+            viewbox.style.transform = `translateX(${sliderPosition}px)`;
+        }
+        // prevent sliding too far to left
+        if (sliderPosition > 0) {
+            viewbox.style.transform = `translateX(0px)`;
+            sliderPosition = 0;
+        }
+        // prevent sliding too far to right
+        if (sliderPosition < (-windowWidth / 2 + distanceToMiddle)) {
+            viewbox.style.transform = `translateX(${-windowWidth / 2 + distanceToMiddle}px)`;
+            sliderPosition = -windowWidth / 2 + distanceToMiddle;
+        }
     }
-    slider === null || slider === void 0 ? void 0 : slider.addEventListener("mousemove", calculate);
+    function mouseUp() {
+        dragging = false;
+        endPos = undefined;
+        prevTranslation = sliderPosition;
+        viewbox.classList.remove("testimonials__slider--grabbing");
+    }
 }
-// THIS VERIFIES EMAIL FOR SUBSCRIPTION
-var inputField = document.querySelector(".footer__input--email");
-var pattern = /^\S+@\S+\.\S+$/;
-var subscription = document.querySelector(".footer__subscription");
-inputField.addEventListener("input", function () {
-    var userInput = inputField.value;
+// VERIFY EMAIL FOR SUBSCRIPTION
+const inputField = document.querySelector(".footer__input--email");
+const pattern = /^\S+@\S+\.\S+$/;
+const subscription = document.querySelector(".footer__subscription");
+inputField.addEventListener("input", () => {
+    let userInput = inputField.value;
     if (pattern.test(userInput)) {
         subscription.classList.remove("footer__subscription--invalid");
         inputField.classList.remove("footer__input--invalid");
@@ -115,8 +142,12 @@ inputField.addEventListener("input", function () {
         console.log("not email");
     }
 });
-// THIS RELOADS THE PAGE WHEN WINDOW RESIZES
-window.addEventListener("resize", function () {
-    var address = location.pathname;
-    location.replace(address);
+// RELOAD THE PAGE WHEN WINDOW WIDTH CHANGES (to keep the slider ok)
+let windowWidth = window.innerWidth;
+window.addEventListener("resize", () => {
+    if (windowWidth != window.innerWidth) {
+        let address = location.pathname;
+        location.replace(address);
+    }
 });
+//# sourceMappingURL=script.js.map
