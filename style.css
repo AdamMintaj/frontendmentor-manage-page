@@ -676,8 +676,8 @@ body {
   }
   .header__nav .nav__links a {
     text-decoration: none;
-    color: black;
-    font-weight: 700;
+    color: #242d52;
+    font-weight: 500;
     margin: 0 1rem;
   }
   .header__nav .nav__links a:hover {
